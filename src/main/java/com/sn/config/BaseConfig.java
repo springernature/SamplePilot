@@ -2,19 +2,23 @@ package com.sn.config;
 
 import java.io.File;
 import java.util.Properties;
+import java.util.concurrent.TimeUnit;
 
-import org.openqa.selenium.NoSuchElementException;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
+import org.testng.IHookCallBack;
+import org.testng.IHookable;
+import org.testng.ITestResult;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.AfterSuite;
-import org.testng.annotations.AfterTest;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeSuite;
-import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Parameters;
+import org.testng.asserts.SoftAssert;
+import org.apache.commons.lang3.exception.ExceptionUtils;
+import org.testng.Reporter;
 
-import com.documentum.fc.common.DfException;
 import com.relevantcodes.extentreports.ExtentReports;
 import com.relevantcodes.extentreports.ExtentTest;
 import com.relevantcodes.extentreports.LogStatus;
@@ -24,8 +28,10 @@ import com.sn.apt.browser.core.IBrowerDriver;
 import com.sn.apt.browser.navigation.IBrowserNavigator;
 import com.sn.apt.browser.operations.BrowserOperationsImpl;
 import com.sn.apt.browserstack.BrowserStack;
+import com.sn.apt.browserstack.ConfigureCapabilities;
 import com.sn.apt.documentum.JobHelper;
-import com.sn.apt.excel.read.ReadExcelData;
+import com.sn.apt.documentum.QueryHelper;
+import com.sn.apt.email.util.SendEmail;
 import com.sn.apt.frame.actions.FrameActions;
 import com.sn.apt.keyboard.actions.IKeyboardActions;
 import com.sn.apt.keyboard.actions.KeyboardActions;
@@ -33,38 +39,39 @@ import com.sn.apt.mouse.actions.IMouseActions;
 import com.sn.apt.mouse.actions.MouseActions;
 import com.sn.apt.util.AutoPilotUtil;
 import com.sn.apt.waits.explicit.ExplicitWait;
-import com.sn.apt.waits.explicit.IExplicitWaitHandler;
 import com.sn.apt.waits.implicit.ImplicitWait;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 /**
- * @author ptn9587
+ * @author Pankaj Tarar
  */
-public class BaseConfig {
+@SuppressWarnings("squid:S1200")
+public class BaseConfig implements IHookable {
 
-    static final Logger LOGGER = LogManager.getLogger(BaseConfig.class);
+    private static final Logger LOGGER = LogManager.getLogger(BaseConfig.class);
 
-    /**
-     * ExtentTest.
-     */
-    private static ExtentTest extentTest;
 
     /**
-     * ExtentReports.
+     * driver.
      */
-    private static ExtentReports report;
+    private static WebDriver baseDriver;
 
     private static Properties config;
+
+    /**
+     * seleniumWaits.
+     */
+    private static ExplicitWait explicitWaits;
 
     /**
      * Selenium wait of implicit type.
      */
     private static ImplicitWait implicitWait;
 
-    private static FrameActions frameactions;
+    private static FrameActions frameActions;
 
-    private static IBrowerDriver browserutil;
+    private static SendEmail sendMail;
+
+    private static IBrowerDriver browserUtil;
 
     private static BrowserDriverImpl browserDriverImpl;
 
@@ -72,137 +79,205 @@ public class BaseConfig {
 
     private static IBrowserNavigator browsernavigator;
 
-    private static ReadExcelData readexceldata;
+    private static IKeyboardActions keyboardActions;
 
-    protected static String environment;
+    private static IMouseActions imouseActions;
 
-    private BrowserStack browserStack;
-
-    protected static WebDriver baseDriver;
-
-    private static IKeyboardActions keyboardactions;
-
-    protected static IMouseActions mouseactions;
-
-    private static IExplicitWaitHandler explicitWaits;
+    private static BrowserStack browserStack;
 
     private static JobHelper jobHelper;
 
+    private static QueryHelper queryHelper;
+
+    private static AutoPilotUtil autopilotUtils;
+
+    private static final String SOFT_ASSERT = "softAssert";
+
+    /**
+     * created variable for config properties.
+     */
     public static final String CONFIG_PROP = "config.properties";
+
+    /**
+     * created variable for current user directory.
+     */
 
     public static final String USER_DIR = "user.dir";
 
-    public static final String TARGET = "target";
 
-    public static final String EXTENT_REPORT_HTML = "ExtentReportResults.html";
+    private static String executionEnvApp;
 
-    public static final String REPO_USERNAME_INT = "jfxi";
-
-    public static final String REPO_PASS_INT = "welk0m";
-
-    public static final String REPO_NAME_INT = "jfxibase";
-
-    public static final String REPO_ARGUMENT_INT =
-        "-user_name jflux_ftp_ex -docbase_name jfxibase -password welk0m";
-
-    public static final String REPO_USERNAME_ACC = "jfxa";
-
-    public static final String REPO_PASS_ACC = "jfxa08";
-
-    public static final String REPO_NAME_ACC = "jfxabase";
-
-    public static final String REPO_ARGUMENT_ACC =
-        "-user_name jfxa -docbase_name jfxabase -password jfxa08 -jobIdentifier rest";
-
+    /**
+     * It will execute beforeSuite.
+     */
     @SuppressWarnings("squid:S2696")
     @BeforeSuite
     public void beforeSuite() {
 
-        report =
-            new ExtentReports(
-                System.getProperty(USER_DIR) + File.separator + TARGET + File.separator
-                    + EXTENT_REPORT_HTML,
-                true);
-
         config = AutoPilotUtil.getPropertiesFile(CONFIG_PROP);
-        frameactions = new FrameActions();
+        frameActions = new FrameActions();
         explicitWaits = new ExplicitWait();
         implicitWait = new ImplicitWait();
-        keyboardactions = new KeyboardActions();
-        readexceldata = new ReadExcelData();
-        mouseactions = new MouseActions();
+        keyboardActions = new KeyboardActions();
+        imouseActions = new MouseActions();
+        browseroprimpl = new BrowserOperationsImpl(getBaseDriver());
         jobHelper = new JobHelper();
+        queryHelper = new QueryHelper();
+
+        LOGGER.info("Before suite set up completed");
 
     }
 
-    @Parameters("env")
-    @SuppressWarnings("squid:S2696")
-    @BeforeTest
-    public void beforeTest(String env) {
-        environment = env;
-        browserutil = new CustomChromeDriver(config.getProperty("chromedriverVersion"));
-        baseDriver = browserutil.getDriver();
-        browseroprimpl = new BrowserOperationsImpl(baseDriver);
-        if (env.equals("INT")) {
-            baseDriver.get(config.getProperty("INTURL"));
-        } else if (env.equals("ACC")) {
-            baseDriver.get(config.getProperty("ACCURL"));
-        }
-        browseroprimpl.maximizeBrowser();
-    }
+    /**
+     * It will execute beforeclass.
+     */
 
-    @AfterTest(alwaysRun = true)
-    public void afterTest() {
-        baseDriver.quit();
-    }
-
+    /**
+     * @param os String
+     * @param osVersion String
+     * @param browserName String
+     * @param browserVersion String
+     * @param browserstackLocal String
+     * @param browserDriver String
+     * @param executionEnv String
+     * @param seleniumVersion String
+     * @param env String
+     */
     @SuppressWarnings("squid:S2696")
     @BeforeClass(alwaysRun = true)
-    public void beforeClass() {
-        extentTest = report.startTest(this.getClass().getSimpleName() + " ::");
+    @Parameters({
+        "os",
+        "osversion",
+        "browserName",
+        "browserVersion",
+        "browserstackLocal",
+        "seleniumVersion",
+        "browserDriver",
+        "env",
+        "executionEnv" })
+    public void beforeClass(
+            final String os,
+            final String osVersion,
+            final String browserName,
+            final String browserVersion,
+            final String browserstackLocal,
+            final String seleniumVersion,
+            final String browserDriver,
+            final String env,
+            final String executionEnv) {
+        executionEnvApp = executionEnv;
+        if ("local".equals(env)) {
+            configureLocalBrowser(executionEnv);
+        } else {
+            configureBrowserStack(
+                os,
+                osVersion,
+                browserName,
+                browserVersion,
+                browserstackLocal,
+                seleniumVersion,
+                browserDriver);
+        }
+
     }
 
-    @AfterClass(alwaysRun = true)
+    /**
+     * @return the executionEnvApp
+     */
+    public static String getExecutionEnvApp() {
+        return executionEnvApp;
+    }
+
+    /**
+     * This method is to configure browserstack settings.
+     * 
+     * @param os String
+     * @param osVersion String
+     * @param browserName String
+     * @param browserVersion String
+     * @param browserstackLocal String
+     * @param seleniumVersion String
+     * @param browserDriver String
+     */
+    @SuppressWarnings("squid:S2696")
+    private void configureBrowserStack(
+            final String os,
+            final String osVersion,
+            final String browserName,
+            final String browserVersion,
+            final String browserstackLocal,
+            final String seleniumVersion,
+            final String browserDriver) {
+        final ConfigureCapabilities caps =
+            new ConfigureCapabilities(
+                os,
+                osVersion,
+                browserName,
+                browserVersion,
+                browserstackLocal,
+                seleniumVersion,
+                browserDriver);
+        browserStack = new BrowserStack(caps, config.getProperty("browserstack_hub_url"));
+        setBaseDriver(browserStack.getDriver());
+        browseroprimpl = new BrowserOperationsImpl(getBaseDriver());
+        implicitWait.implicitWait(getBaseDriver(), 10);
+        getBaseDriver().manage().timeouts().pageLoadTimeout(20, TimeUnit.SECONDS);
+    }
+
+    /**
+     * This method is to configure execution in local browser.
+     * 
+     * @param executionEnv String
+     */
+    @SuppressWarnings("squid:S2696")
+    @Parameters("executionEnv")
+    private void configureLocalBrowser(final String executionEnv) {
+        browserUtil = new CustomChromeDriver(config.getProperty("chromedriverVersion"));
+        setBaseDriver(browserUtil.getDriver());
+        browseroprimpl = new BrowserOperationsImpl(getBaseDriver());
+        implicitWait.implicitWait(getBaseDriver(), 20);
+        if ("INT".equals(executionEnv)) {
+            LOGGER.info("Set environemnt as INTEGRATION");
+            getBaseDriver().get(config.getProperty("project_int_url"));
+        } else if ("ACC".equals(executionEnv)) {
+            getBaseDriver().get(config.getProperty("project_acc_url"));
+            LOGGER.info("Set environemnt as ACCEPTANCE");
+        }
+        getBaseDriver().manage().window().maximize();
+    }
+
+    /**
+     * It will execute afterclass.
+     */
+    @AfterClass(alwaysRun = false)
     public void afterClass() {
-        getExtentTest().log(LogStatus.INFO, "Quiting driver in after Class");
-        getReport().endTest(getExtentTest());
-        getReport().flush();
+        LOGGER.info("Quiting driver in after class");
+        getBaseDriver().quit();
     }
 
+    /**
+     * It will execute after Suite.
+     */
     @AfterSuite
     public void afterSuite() {
-        baseDriver.quit();
-        getReport().endTest(getExtentTest());
-        getReport().flush();
+        LOGGER.info("After suite executed");
+
     }
 
-    public static ReadExcelData getReadExcel() {
-        return readexceldata;
-    }
 
-    public static void setRead(final ReadExcelData readexceldata) {
-        BaseConfig.readexceldata = readexceldata;
+    /**
+     * @return the baseDriver
+     */
+    public WebDriver getBaseDriver() {
+        return baseDriver;
     }
 
     /**
-     * @return the test
+     * @param baseDriver the baseDriver to set
      */
-    public static ExtentTest getExtentTest() {
-        return extentTest;
-    }
-
-    /**
-     * @param extentTest the test to set
-     */
-    public static void setExtentTest(final ExtentTest extentTest) {
-        BaseConfig.extentTest = extentTest;
-    }
-
-    /**
-     * @return the report
-     */
-    public static ExtentReports getReport() {
-        return report;
+    @SuppressWarnings("squid:S2696")
+    public void setBaseDriver(final WebDriver baseDriver) {
+        this.baseDriver = baseDriver;
     }
 
     /**
@@ -213,61 +288,45 @@ public class BaseConfig {
     }
 
     /**
-     * @param config to set
+     * @return the explicitWaits
      */
-    @SuppressWarnings("squid:S2696")
-    public void setConfig(final Properties config) {
-        BaseConfig.config = config;
-    }
-
-    /**
-     * @return IKeyboardActions
-     */
-
-    public IKeyboardActions getKeywordactions() {
-        return keyboardactions;
-    }
-
-    /**
-     * @return SeleniumImplicitWait
-     */
-    public ImplicitWait getSeleniumImplicitWait() {
-        return implicitWait;
-    }
-
-    /**
-     * @return the browserutil
-     */
-    public static IBrowerDriver getBrowserutil() {
-        return browserutil;
-    }
-
-    /**
-     * @return the browserStack
-     */
-    public BrowserStack getBrowserStack() {
-        return browserStack;
-    }
-
-    /**
-     * @param browserStack the browserStack to set
-     */
-    public void setBrowserStack(final BrowserStack browserStack) {
-        this.browserStack = browserStack;
-    }
-
-    /**
-     * @return the seleniumexphicitWaits
-     */
-    public static IExplicitWaitHandler getSeleniumexplicitWaits() {
+    public ExplicitWait getExplicitWaits() {
         return explicitWaits;
+    }
+
+    /**
+     * @return the implicitWait
+     */
+    public ImplicitWait getImplicitWait() {
+        return implicitWait;
     }
 
     /**
      * @return the frameactions
      */
-    public static FrameActions getFrameactions() {
-        return frameactions;
+    public FrameActions getFrameactions() {
+        return frameActions;
+    }
+
+    /**
+     * @return the sendmail
+     */
+    public SendEmail getSendmail() {
+        return sendMail;
+    }
+
+    /**
+     * @return the browserutil
+     */
+    public IBrowerDriver getBrowserutil() {
+        return browserUtil;
+    }
+
+    /**
+     * @return the browserDriverImpl.
+     */
+    public BrowserDriverImpl getBrowserDriverImpl() {
+        return browserDriverImpl;
     }
 
     /**
@@ -278,145 +337,89 @@ public class BaseConfig {
     }
 
     /**
-     * @param browseroprimpl the browseroprimpl to set
-     */
-    public static void setBrowseroprimpl(final BrowserOperationsImpl browseroprimpl) {
-        BaseConfig.browseroprimpl = browseroprimpl;
-    }
-
-    /**
      * @return the browsernavigator
      */
-    public static IBrowserNavigator getBrowsernavigator() {
+    public IBrowserNavigator getBrowsernavigator() {
         return browsernavigator;
     }
 
     /**
-     * @param browsernavigator the browsernavigator to set
+     * @return the keyboardactions
      */
-    public static void setBrowsernavigator(final IBrowserNavigator browsernavigator) {
-        BaseConfig.browsernavigator = browsernavigator;
+    public IKeyboardActions getKeyboardactions() {
+        return keyboardActions;
     }
 
     /**
-     * @return the browserDriverImpl
+     * @return the imouseactions
      */
-    public static BrowserDriverImpl getBrowserDriverImpl() {
-        return browserDriverImpl;
+    public IMouseActions getImouseactions() {
+        return imouseActions;
     }
 
     /**
-     * @param browserDriverImpl the browserDriverImpl to set
+     * @return the browserStack
      */
-    public static void setBrowserDriverImpl(final BrowserDriverImpl browserDriverImpl) {
-        BaseConfig.browserDriverImpl = browserDriverImpl;
+    public BrowserStack getBrowserStack() {
+        return browserStack;
     }
 
-    public boolean isElementPresent(final WebElement element) {
-        try {
-            if (element.isDisplayed()) {
-                LOGGER.info("isElementPresent:: is present");
-                return true;
-            } else {
-                LOGGER.warn("isElementPresent::FAIL - is not present");
-                return false;
+    /**
+     * @return the jobhelper
+     */
+    public JobHelper getJobhelper() {
+        return jobHelper;
+    }
+
+    /**
+     * @return queryHelper
+     */
+    public QueryHelper getQueryhelper() {
+        return queryHelper;
+    }
+
+    /**
+     * @return the autopilotUtils
+     */
+    public AutoPilotUtil getAutopilotUtils() {
+        return autopilotUtils;
+    }
+
+    @Override
+    public void run(final IHookCallBack callBack, final ITestResult testResult) {
+        SoftAssert softAssert = new SoftAssert();
+        testResult.setAttribute(SOFT_ASSERT, softAssert);
+        callBack.runTestMethod(testResult);
+        softAssert = getSoftAssert(testResult);
+        if (!testResult.isSuccess()) {
+            Throwable throwable = testResult.getThrowable();
+            if (null != throwable) {
+                if (null != throwable.getCause()) {
+                    throwable = throwable.getCause();
+                }
+                softAssert.assertNull(throwable, ExceptionUtils.getStackTrace(throwable));
             }
-        } catch (Exception e) {
-            throw new NoSuchElementException("ERROR: Element not found", e);
         }
+        softAssert.assertAll();
     }
 
-    protected void runFTPExchangeJob(final String Env) throws DfException {
-        if (Env.equals("INT")) {
-            jobHelper.executeMethod(
-                "jspr_ftp_exchange_job",
-                REPO_USERNAME_INT,
-                REPO_PASS_INT,
-                REPO_NAME_INT,
-                REPO_ARGUMENT_INT);
-        } else {
-            jobHelper.executeMethod(
-                "jspr_ftp_exchange_job",
-                REPO_USERNAME_ACC,
-                REPO_PASS_ACC,
-                REPO_NAME_ACC,
-                REPO_ARGUMENT_ACC);
-        }
+    /**
+     * @return softAssert
+     */
+    public static SoftAssert getSoftAssert() {
+        return getSoftAssert(Reporter.getCurrentTestResult());
     }
 
-    protected void runSendToVendorJob(final String Env) throws DfException {
-        if (Env.equals("INT")) {
-            jobHelper.executeMethod(
-                "jspr_sc_send_packages",
-                REPO_USERNAME_INT,
-                REPO_PASS_INT,
-                REPO_NAME_INT,
-                REPO_ARGUMENT_INT);
-        } else {
-            jobHelper.executeMethod(
-                "jspr_sc_send_packages",
-                REPO_USERNAME_ACC,
-                REPO_PASS_ACC,
-                REPO_NAME_ACC,
-                REPO_ARGUMENT_ACC);
-
+    /**
+     * @param result ITestResult
+     * @return (SoftAssert) object
+     */
+    private static SoftAssert getSoftAssert(final ITestResult result) {
+        final Object object = result.getAttribute(SOFT_ASSERT);
+        if (object instanceof SoftAssert) {
+            return (SoftAssert) object;
         }
-    }
-
-    protected void runGetResultPackageJob(final String Env) throws DfException {
-        if (Env.equals("INT")) {
-            jobHelper.executeMethod(
-                "jspr_sc_get_result_packages",
-                REPO_USERNAME_INT,
-                REPO_PASS_INT,
-                REPO_NAME_INT,
-                REPO_ARGUMENT_INT);
-        } else {
-            jobHelper.executeMethod(
-                "jspr_sc_get_result_packages",
-                REPO_USERNAME_ACC,
-                REPO_PASS_ACC,
-                REPO_NAME_ACC,
-                REPO_ARGUMENT_ACC);
-        }
-    }
-
-    protected void runImportFromVendorJob(final String Env) throws DfException {
-        if (Env.equals("INT")) {
-            jobHelper.executeMethod(
-                "jspr_import_from_vendor",
-                REPO_USERNAME_INT,
-                REPO_PASS_INT,
-                REPO_NAME_INT,
-                REPO_ARGUMENT_INT);
-        } else {
-            jobHelper.executeMethod(
-                "jspr_import_from_vendor",
-                REPO_USERNAME_ACC,
-                REPO_PASS_ACC,
-                REPO_NAME_ACC,
-                REPO_ARGUMENT_ACC);
-        }
-    }
-
-    protected void runEnrichmentControllerJob(final String env) throws DfException {
-        if (env.equals("INT")) {
-            jobHelper.executeMethod(
-                "jspr_import_from_ec_job",
-                REPO_USERNAME_INT,
-                REPO_PASS_INT,
-                REPO_NAME_INT,
-                REPO_ARGUMENT_INT);
-
-        } else {
-            jobHelper.executeMethod(
-                "jspr_import_from_ec_job",
-                REPO_USERNAME_ACC,
-                REPO_PASS_ACC,
-                REPO_NAME_ACC,
-                REPO_ARGUMENT_ACC);
-        }
-
+        throw new IllegalStateException("Could not find a soft assertion object");
     }
 
 }

@@ -1,4 +1,7 @@
 package com.sn.pageobjects;
+/**
+ * This file is for reference only. 
+ */
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
