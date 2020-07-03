@@ -54,7 +54,7 @@ compile "org.apache.poi:poi-ooxml:3.17"
 compile group: 'org.apache.logging.log4j', name: 'log4j-api', version: '2.11.1'
 compile group: 'org.apache.logging.log4j', name: 'log4j-core', version: '2.11.1'
 //extent report dependency
-compile group: 'com.aventstack', name: 'extentreports', version: '3.0.0'
+compile group: 'com.aventstack', name: 'extentreports', version: '3.1.2'
 // https://mvnrepository.com/artifact/com.relevantcodes/extentreports
 compile group: 'com.relevantcodes', name: 'extentreports', version: '2.41.2'
 compile group: 'commons-validator', name: 'commons-validator', version: '1.4.0'
@@ -81,7 +81,7 @@ compile group: 'org.springframework', name: 'spring-context', version: '3.0.7.RE
 compile group: 'org.springframework', name: 'spring-core', version: '3.0.7.RELEASE'
 compile group: 'org.springframework', name: 'spring-test', version: '3.0.7.RELEASE'
 compile group: 'software.amazon.ion', name: 'ion-java', version: '1.0.2'
-compile group: 'com.springernature', name: 'AutoPilot', version: '2.0.3'
+compile group: 'com.springernature', name: 'AutoPilot', version: '2.0.6'
 // Browserstack dependency
 // https://mvnrepository.com/artifact/com.browserstack/automate-testassist
 compile group: 'com.browserstack', name: 'automate-testassist', version: '1.0.0'
