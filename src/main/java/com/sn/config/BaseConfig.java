@@ -49,7 +49,6 @@ public class BaseConfig implements IHookable {
 
     private static final Logger LOGGER = LogManager.getLogger(BaseConfig.class);
 
-
     /**
      * driver.
      */
@@ -104,6 +103,10 @@ public class BaseConfig implements IHookable {
 
     public static final String USER_DIR = "user.dir";
 
+    /**
+     * created variable for target directory.
+     */
+    public static final String TARGET = "target";
 
     private static String executionEnvApp;
 
@@ -263,7 +266,6 @@ public class BaseConfig implements IHookable {
         LOGGER.info("After suite executed");
 
     }
-
 
     /**
      * @return the baseDriver

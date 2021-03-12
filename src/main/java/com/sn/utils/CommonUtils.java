@@ -1,6 +1,6 @@
 package com.sn.utils;
 /**
- * This file is for reference only. 
+ * This file is for reference only.
  */
 
 import java.io.File;
@@ -31,13 +31,14 @@ public class CommonUtils {
 
     private Boolean pass;
 
-    
     public static final String SUCCESSFULLY = " successfully";
 
     /**
      * 
      */
     public static final String BUTTON = "Button";
+
+    private static final String FAILED = "failed";
 
     /**
      * @param baseConfig BaseConfig
