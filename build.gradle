@@ -39,25 +39,33 @@ property "sonar.projectKey", "Sample_Functional_Regression"
 }
 buildDir = 'target'
 dependencies {
+
 //java -selenium dependency
 compile group: 'org.seleniumhq.selenium', name: 'selenium-java', version: '3.11.0'
+
 //webdriver manager dependency - for browser set up
 compile("io.github.bonigarcia:webdrivermanager:3.1.1")
+
 //test ng dependency
 compile group: 'org.testng', name: 'testng', version: '6.11'
 compile group: 'org.apache.httpcomponents', name: 'httpclient', version: '4.5.3'
 compile group: 'org.apache.commons', name: 'commons-lang3', version: '3.0'
+
 //Java Excel solution dependency
 compile "org.apache.poi:poi:3.17"
 compile "org.apache.poi:poi-ooxml:3.17"
+
 //log 4j logger dependency
 compile group: 'org.apache.logging.log4j', name: 'log4j-api', version: '2.11.1'
 compile group: 'org.apache.logging.log4j', name: 'log4j-core', version: '2.11.1'
+
 //extent report dependency
 compile group: 'com.aventstack', name: 'extentreports', version: '3.1.2'
+
 // https://mvnrepository.com/artifact/com.relevantcodes/extentreports
 compile group: 'com.relevantcodes', name: 'extentreports', version: '2.41.2'
 compile group: 'commons-validator', name: 'commons-validator', version: '1.4.0'
+
 //s3 dependency
 compile group: 'com.amazonaws', name: 'aws-java-sdk', version: '1.11.90'
 compile group: 'commons-codec', name: 'commons-codec', version: '1.9'
@@ -81,17 +89,31 @@ compile group: 'org.springframework', name: 'spring-context', version: '3.0.7.RE
 compile group: 'org.springframework', name: 'spring-core', version: '3.0.7.RELEASE'
 compile group: 'org.springframework', name: 'spring-test', version: '3.0.7.RELEASE'
 compile group: 'software.amazon.ion', name: 'ion-java', version: '1.0.2'
-compile group: 'com.springernature', name: 'AutoPilot', version: '2.0.6'
+compile group: 'com.springernature', name: 'AutoPilot', version: '3.0.8'
+
 // Browserstack dependency
+
 // https://mvnrepository.com/artifact/com.browserstack/automate-testassist
 compile group: 'com.browserstack', name: 'automate-testassist', version: '1.0.0'
+
 // https://mvnrepository.com/artifact/com.browserstack/automate-maven-plugin
 compile group: 'com.browserstack', name: 'automate-maven-plugin', version: '1.0.0'
+
 // https://mvnrepository.com/artifact/org.aspectj/aspectjtools
 compile group: 'org.aspectj', name: 'aspectjtools', version: '1.9.4'
+
 // https://mvnrepository.com/artifact/org.codehaus.mojo/aspectj-maven-plugin
 compile group: 'org.codehaus.mojo', name: 'aspectj-maven-plugin', version: '1.11'
 compile 'org.apache.maven.plugins:maven-surefire-plugin:2.21.0'
+
+// https://mvnrepository.com/artifact/org.apache.pdfbox/pdfbox
+compile group: 'org.apache.pdfbox', name: 'pdfbox', version: '2.0.12'
+
+// https://mvnrepository.com/artifact/jaxen/jaxen
+implementation group: 'jaxen', name: 'jaxen', version: '1.2.0'
+
+// https://mvnrepository.com/artifact/org.dom4j/dom4j
+implementation group: 'org.dom4j', name: 'dom4j', version: '2.1.1'
 compile fileTree(dir: 'src/main/resources/libs', includes: ['*.jar'])
 
 test {
