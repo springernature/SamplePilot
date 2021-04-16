@@ -8,8 +8,6 @@
  <parameter name="env" value="{ENVIRONMENT}"/>
   <test thread-count="5" name="Test">
     <classes>
-    <!--  <class name="com.sn.regression.internal.ArticleWorkflowSuite"/>
-    <class name="com.sn.sanity.SanitySuite"/>-->
       <class name="com.sn.smoke.SmokeSuite"/>
     </classes>
   </test> <!-- Test -->
