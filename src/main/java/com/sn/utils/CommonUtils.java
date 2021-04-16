@@ -1,6 +1,8 @@
 package com.sn.utils;
 /**
- * This file is for reference only.
+ * This file is for reference only. Respective projects should tweak methods in the class. This
+ * class has created just to give reference on how to write reusable actions using autopilot
+ * methods.
  */
 
 import java.io.File;
@@ -29,8 +31,6 @@ public class CommonUtils {
     private static final Logger LOGGER = LogManager.getLogger(CommonUtils.class);
 
     private BaseConfig baseConfig;
-
-    private Boolean pass;
 
     public static final String SUCCESSFULLY = " successfully";
 
@@ -85,7 +85,7 @@ public class CommonUtils {
      * @throws Exception
      */
     @SuppressWarnings("squid:S00112")
-    public CommonUtils clickOnButtonByName(final String buttonName) throws Exception {
+    public CommonUtils clickOnButtonByNameForXcpApps(final String buttonName) throws Exception {
         String elementText = null;
         try {
 
@@ -131,8 +131,7 @@ public class CommonUtils {
                 LOGGER.info(BUTTON + element.getText() + " is enabled");
                 ExtentTestManager.getTest().log(Status.PASS, element.getText() + " is enabled.");
             } else {
-                LOGGER.error(BUTTON + element.getText() + " is disabled");
-                ExtentTestManager.getTest().log(Status.FAIL, element.getText() + " is disabled.");
+                commonLogger(BUTTON + element.getText() + " is disabled", Status.PASS, Level.INFO);
             }
         } catch (final Exception e) {
             LOGGER.error(e);
@@ -166,8 +165,8 @@ public class CommonUtils {
                 100);
             baseConfig.getKeyboardactions().clearText(baseConfig.getBaseDriver(), element);
             baseConfig.getKeyboardactions().sendKeys(baseConfig.getBaseDriver(), element, text);
-            ExtentTestManager.getTest().log(Status.PASS, logMessage);
-            LOGGER.info(logMessage);
+            commonLogger(logMessage, Status.PASS, Level.INFO);
+
         } catch (final Exception e) {
             LOGGER.error("Unaable to set text " + element + FAILED + e);
             ExtentTestManager.getTest().log(
@@ -179,58 +178,15 @@ public class CommonUtils {
     }
 
     /**
-     * Method to verify Quotes Dashboard dropdown values..
-     * 
-     * @return boolean
-     * @param dropdownlist Actual list of dropdown values
-     * @param dropdownArrow webelement representing dropdown arrow
-     * @param expectedLabelsList Expected list of dropdown values
-     */
-    public Boolean verifyDropDownLabels(
-            final List<WebElement> dropdownlist,
-            final WebElement dropdownArrow,
-            final ImmutableList<String> expectedLabelsList) {
-
-        try {
-            baseConfig.getKeyboardactions().clickOnElement(
-                baseConfig.getBaseDriver(),
-                dropdownArrow);
-
-            final List<String> actualLabels = new ArrayList<>();
-
-            for (WebElement webElement : dropdownlist) {
-
-                actualLabels.add(webElement.getText());
-
-            }
-
-            pass = expectedLabelsList.equals(actualLabels);
-
-            if (pass != null && pass.booleanValue()) {
-
-                LOGGER.info("Dropdown list is verified successfully");
-                ExtentTestManager.getTest().log(
-                    Status.INFO,
-                    "Dropdown list elements verified successfuly.");
-            } else {
-
-                LOGGER.info("Dropdown list elements do not match");
-                ExtentTestManager.getTest().log(Status.INFO, "Dropdown list elements do not match");
-            }
-        } catch (final Exception e) {
-            LOGGER.error(e);
-        }
-        return pass;
-    }
-
-    /**
-     * Select any dropdown value .
+     * Select any dropdown value For xCP Apps.
      * 
      * @param dropdownValue String
      * @param btnDropdownXpath String
      * @return this class driver
      */
-    public CommonUtils selectDropDowns(final String dropdownValue, final String btnDropdownXpath) {
+    public CommonUtils selectDropDownsForXcpApps(
+            final String dropdownValue,
+            final String btnDropdownXpath) {
 
         try {
 
@@ -263,13 +219,15 @@ public class CommonUtils {
     }
 
     /**
-     * Method to verify Quotes Dashboard Column name.
+     * Method to verify Column name For xCP Apps.
      * 
      * @return boolean
      * @param columnNumber index of column
      * @param expectedColumnName Expected Column name
      */
-    public boolean verifyColumnName(final int columnNumber, final String expectedColumnName) {
+    public boolean verifyColumnNameForxCPApps(
+            final int columnNumber,
+            final String expectedColumnName) {
 
         final WebElement colName =
             baseConfig.getBaseDriver().findElement(
@@ -393,18 +351,6 @@ public class CommonUtils {
     }
 
     /**
-     * @param message String message
-     * @return this
-     */
-    public CommonUtils printFailLog(final String message) {
-
-        LOGGER.error(message);
-        ExtentTestManager.getTest().log(Status.FAIL, message);
-        return this;
-
-    }
-
-    /**
      * @return the screenShotPath
      */
     public static String getScreenShotPath() {
@@ -418,7 +364,7 @@ public class CommonUtils {
      * @param value String actual value to pass against lable
      * @return driver CommonUtils class driver
      */
-    public CommonUtils setForLable(
+    public CommonUtils setForLableForxCPApps(
             final String lableName,
             final int indexNumber,
             final String value) {
@@ -460,7 +406,7 @@ public class CommonUtils {
      * @param colNum int colnumber
      * @return value String
      */
-    public String storeTableValueByRowCol(final int rowNum, final int colNum) {
+    public String storeTableValueByRowColForxCPApps(final int rowNum, final int colNum) {
 
         final String locatorxPath =
             "//div[contains(@class,'xcp_results_list-cls')]" + "//table[" + rowNum + "]//td["
@@ -487,7 +433,7 @@ public class CommonUtils {
      * @param value String actual value to pass against placeHolderName
      * @return driver CommonUtils class driver
      */
-    public CommonUtils setTextUsingPlaceholder(
+    public CommonUtils setTextUsingPlaceholderForxCPApps(
             final String placeHolderName,
             final int indexNumber,
             final String value) {
