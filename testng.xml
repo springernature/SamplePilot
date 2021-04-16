@@ -4,9 +4,18 @@
 <listeners>
 		<listener class-name="com.sn.listeners.TestListener" />
 	</listeners>
- <!--<parameter name="env" value="INT"/> -->
- <parameter name="env" value="{ENVIRONMENT}"/>
-  <test thread-count="5" name="Test">
+ <test thread-count="5" name="Test">
+ 		<parameter name="os" value="windows" />
+		<parameter name="osversion" value="7" />
+		<parameter name="browserName" value="chrome" />
+		<parameter name="browserVersion" value="62.0" />
+		<parameter name="browserstackLocal" value="true" />
+		<parameter name="seleniumVersion" value="3.5.2" />
+		<parameter name="browserDriver" value="" />
+		<parameter name="env" value="local" />
+ 		<parameter name="executionEnv" value="{ENVIRONMENT}"/>
+ 		<!--<parameter name="executionEnv" value="INT"/> -->
+  
     <classes>
       <class name="com.sn.smoke.SmokeSuite"/>
     </classes>

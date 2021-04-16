@@ -1,6 +1,5 @@
 package com.sn.config;
 
-import java.io.File;
 import java.util.Properties;
 import java.util.concurrent.TimeUnit;
 
@@ -19,9 +18,6 @@ import org.testng.asserts.SoftAssert;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.testng.Reporter;
 
-import com.relevantcodes.extentreports.ExtentReports;
-import com.relevantcodes.extentreports.ExtentTest;
-import com.relevantcodes.extentreports.LogStatus;
 import com.sn.apt.browser.core.BrowserDriverImpl;
 import com.sn.apt.browser.core.CustomChromeDriver;
 import com.sn.apt.browser.core.IBrowerDriver;
