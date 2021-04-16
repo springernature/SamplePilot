@@ -89,7 +89,7 @@ compile group: 'org.springframework', name: 'spring-context', version: '3.0.7.RE
 compile group: 'org.springframework', name: 'spring-core', version: '3.0.7.RELEASE'
 compile group: 'org.springframework', name: 'spring-test', version: '3.0.7.RELEASE'
 compile group: 'software.amazon.ion', name: 'ion-java', version: '1.0.2'
-compile group: 'com.springernature', name: 'AutoPilot', version: '3.0.8'
+compile group: 'com.springernature', name: 'AutoPilot', version: '3.0.9'
 
 // Browserstack dependency
 
