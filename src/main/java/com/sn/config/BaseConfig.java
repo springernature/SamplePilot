@@ -31,6 +31,7 @@ import com.sn.apt.email.util.SendEmail;
 import com.sn.apt.frame.actions.FrameActions;
 import com.sn.apt.keyboard.actions.IKeyboardActions;
 import com.sn.apt.keyboard.actions.KeyboardActions;
+import com.sn.apt.listeners.WebDriverSupplier;
 import com.sn.apt.mouse.actions.IMouseActions;
 import com.sn.apt.mouse.actions.MouseActions;
 import com.sn.apt.util.AutoPilotUtil;
@@ -41,7 +42,7 @@ import com.sn.apt.waits.implicit.ImplicitWait;
  * @author Pankaj Tarar
  */
 @SuppressWarnings("squid:S1200")
-public class BaseConfig implements IHookable {
+public class BaseConfig implements IHookable, WebDriverSupplier {
 
     private static final Logger LOGGER = LogManager.getLogger(BaseConfig.class);
 

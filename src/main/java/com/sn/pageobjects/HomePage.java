@@ -1,7 +1,7 @@
 package com.sn.pageobjects;
 
 /**
- * This file is for reference only. 
+ * This file is for reference only.
  */
 
 import java.awt.image.BufferedImage;
@@ -15,6 +15,7 @@ import java.nio.file.Paths;
 
 import javax.imageio.ImageIO;
 
+import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.openqa.selenium.By;
@@ -24,7 +25,7 @@ import org.openqa.selenium.support.PageFactory;
 
 import com.aventstack.extentreports.Status;
 import com.sn.config.BaseConfig;
-import com.sn.listeners.ExtentTestManager;
+import com.sn.apt.listeners.ExtentTestManager;
 import com.sn.utils.CommonUtils;
 
 /**
@@ -36,7 +37,7 @@ public class HomePage {
 
     private static final Logger LOGGER = LogManager.getLogger(HomePage.class);
 
-    private CommonUtils commonutils;
+    private CommonUtils commonUtils;
 
     private BaseConfig baseconfig;
 
@@ -102,10 +103,9 @@ public class HomePage {
     public HomePage(final BaseConfig baseconfig) {
         this.baseconfig = baseconfig;
         PageFactory.initElements(baseconfig.getBaseDriver(), this);
-        commonutils = new CommonUtils(baseconfig);
+        commonUtils = new CommonUtils(baseconfig);
         LOGGER.info("Constructor initialize in Generate Production Order class");
     }
-
 
     /**
      * @param menuName String menuName
@@ -132,16 +132,22 @@ public class HomePage {
         final WebElement elementMenuName =
             baseconfig.getBaseDriver().findElement(By.xpath(xPathMenuName));
 
-        commonutils.clickOnElement(elementMenuName);
+        commonUtils.clickOnElement(elementMenuName);
 
         final WebElement elementMenuValue =
             baseconfig.getBaseDriver().findElement(By.xpath(xPathMenuValue));
 
-        commonutils.clickOnElement(elementMenuValue);
+        commonUtils.clickOnElement(elementMenuValue);
         LOGGER.info(
             "Main Menu Name: " + menuName + ", Child Menu Name: " + menuValue
                 + " is selected successfully.");
         ExtentTestManager.getTest().log(Status.PASS, logMessage);
+
+        commonUtils.commonLogger(
+            "Main Menu Name: " + menuName + ", Child Menu Name: " + menuValue
+                + " is selected successfully.",
+            Status.PASS,
+            Level.INFO);
         return this;
 
     }
@@ -186,12 +192,14 @@ public class HomePage {
         try (InputStream in = new URL(srcImg).openStream()) {
             Files.copy(in, Paths.get(destImg));
         } catch (final IOException e) {
-            LOGGER.error(e);
-            ExtentTestManager.getTest().log(Status.FAIL, "Unable to download image");
+            commonUtils.commonLogger(
+                "Exception ocurred in copying image ",
+                Status.FAIL,
+                Level.ERROR);
+
             throw e;
         }
-
-        LOGGER.info("Image is saved in:" + destImg);
+        commonUtils.commonLogger("Image is saved in:" + destImg, Status.PASS, Level.INFO);
     }
 
     /**
@@ -216,12 +224,22 @@ public class HomePage {
             final Path path = Paths.get(tmpDirectory);
             if (!path.toFile().exists()) {
                 Files.createDirectory(path);
-                LOGGER.info("Directory created: " + tmpDirectory);
+                commonUtils.commonLogger(
+                    "Directory created: " + tmpDirectory,
+                    Status.PASS,
+                    Level.INFO);
             } else {
-                LOGGER.info("Directory already exists : " + tmpDirectory);
-            }
+                commonUtils.commonLogger(
+                    "Directory already exists : " + tmpDirectory,
+                    Status.PASS,
+                    Level.INFO);
 
-            LOGGER.info("Source of standard image: " + standardFilename);
+            }
+            commonUtils.commonLogger(
+                "Source of standard image: " + standardFilename,
+                Status.PASS,
+                Level.INFO);
+
             final File imgFileStandard = new File(standardFilename);
             final BufferedImage imgBuffStandard = ImageIO.read(imgFileStandard);
             LOGGER.info("File object for standard image is created");
@@ -233,21 +251,22 @@ public class HomePage {
             LOGGER.info("File object for image from Web Element is created");
 
             if (bufferedImagesEqual(imgBuffWebElement, imgBuffStandard)) {
-                LOGGER.info("Images are equal");
+                commonUtils.commonLogger("Images are equal", Status.PASS, Level.INFO);
+
                 isEqualImg = true;
             } else {
-                LOGGER.error("Images are different");
-                ExtentTestManager.getTest().log(
+                commonUtils.commonLogger(
+                    "Image is not equal to standard " + standardImgFilename,
                     Status.FAIL,
-                    "Image is not equal to standard " + standardImgFilename);
+                    Level.ERROR);
+
             }
 
             Files.delete(Paths.get(tmpFilename));
             LOGGER.info("Temporary image is deleted");
 
         } catch (final IOException e) {
-            LOGGER.error(e);
-            ExtentTestManager.getTest().log(Status.FAIL, "Unable to compare images");
+            commonUtils.commonLogger("Unable to compare images", Status.FAIL, Level.ERROR);
             throw e;
         }
         return isEqualImg;
@@ -266,7 +285,7 @@ public class HomePage {
                 baseconfig.getBaseDriver(),
                 imgEdFluxLogo,
                 30);
-            commonutils.verifyElement(imgEdFluxLogo);
+            commonUtils.verifyElement(imgEdFluxLogo);
             LOGGER.info("Edflux logo is present");
             isCorrectLogo = verifyImage(imgEdFluxLogo, filenameEdFluxLogo);
             LOGGER.info("EdFlux logo has compared with the standard. ");
@@ -276,8 +295,7 @@ public class HomePage {
                 throw new IOException();
             }
         } catch (final IOException e) {
-            LOGGER.error(e);
-            ExtentTestManager.getTest().log(Status.FAIL, "Edflux logo is incorrect");
+            commonUtils.commonLogger("Edflux logo is incorrect", Status.FAIL, Level.ERROR);
             throw e;
         }
         return this;
@@ -296,7 +314,7 @@ public class HomePage {
                 baseconfig.getBaseDriver(),
                 imgSpringerNatureLogo,
                 30);
-            commonutils.verifyElement(imgSpringerNatureLogo);
+            commonUtils.verifyElement(imgSpringerNatureLogo);
             LOGGER.info("SpringerNature logo is present");
             isCorrectLogo = verifyImage(imgSpringerNatureLogo, filenameSpringerNatureLogo);
             LOGGER.info("SpringerNature logo has compared with the standard. ");
@@ -306,8 +324,7 @@ public class HomePage {
                 throw new IOException();
             }
         } catch (final IOException e) {
-            LOGGER.error(e);
-            ExtentTestManager.getTest().log(Status.FAIL, "SpringerNature logo is incorrect");
+            commonUtils.commonLogger("SpringerNature logo is incorrect", Status.FAIL, Level.ERROR);
             throw e;
         }
         return this;

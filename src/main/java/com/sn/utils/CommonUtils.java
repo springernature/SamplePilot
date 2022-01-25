@@ -19,9 +19,8 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.PageFactory;
 
 import com.aventstack.extentreports.Status;
-import com.google.common.collect.ImmutableList;
 import com.sn.config.BaseConfig;
-import com.sn.listeners.ExtentTestManager;
+import com.sn.apt.listeners.ExtentTestManager;
 
 /**
  * @author Pankaj Tarar

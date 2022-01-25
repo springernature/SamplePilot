@@ -1,8 +1,9 @@
 package com.sn.pageobjects;
 /**
- * This file is for reference only. 
+ * This file is for reference only.
  */
 
+import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.openqa.selenium.WebElement;
@@ -11,7 +12,7 @@ import org.openqa.selenium.support.PageFactory;
 
 import com.aventstack.extentreports.Status;
 import com.sn.config.BaseConfig;
-import com.sn.listeners.ExtentTestManager;
+import com.sn.apt.listeners.ExtentTestManager;
 import com.sn.utils.CommonUtils;
 
 /**
@@ -129,10 +130,10 @@ public class LoginPage {
             clickLoginSignInButtob();
             LOGGER.info("Login is Successful.");
         } catch (final Exception e) {
-            LOGGER.error("Error occurred while Login process.");
-            ExtentTestManager.getTest().log(
+            commonUtils.commonLogger(
+                "Error occurred while Login process.",
                 Status.FAIL,
-                "Error occurred while Login process." + e.getMessage());
+                Level.ERROR);
             throw e;
         }
 
