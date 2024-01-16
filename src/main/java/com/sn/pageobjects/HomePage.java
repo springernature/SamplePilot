@@ -24,8 +24,8 @@ import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 
 import com.aventstack.extentreports.Status;
-import com.sn.config.BaseConfig;
 import com.sn.apt.listeners.ExtentTestManager;
+import com.sn.config.BaseConfig;
 import com.sn.utils.CommonUtils;
 
 /**
@@ -80,14 +80,12 @@ public class HomePage {
     @FindBy(xpath = "//link[@rel='icon']")
     private WebElement icoEdFluxLogo;
 
-    @FindBy(
-            xpath = "//a[@class='x-img xcp-image-widget-wrapper"
-                + " xcpid_image1 xcp_image-cls x-box-item x-img-default']/img")
+    @FindBy(xpath = "//a[@class='x-img xcp-image-widget-wrapper"
+            + " xcpid_image1 xcp_image-cls x-box-item x-img-default']/img")
     private WebElement imgEdFluxLogo;
 
-    @FindBy(
-            xpath = "//a[contains(@class,'x-img xcp-image-widget-wrapper"
-                + " xcpid_image xcp_image-cls x-box-item x-img-default')]/img")
+    @FindBy(xpath = "//a[contains(@class,'x-img xcp-image-widget-wrapper"
+            + " xcpid_image xcp_image-cls x-box-item x-img-default')]/img")
     private WebElement imgSpringerNatureLogo;
 
     private String filenameEdFluxLogo = "Flux_Logo.png";
@@ -97,7 +95,8 @@ public class HomePage {
     /**
      * This is the constructor for Homepage class.
      * 
-     * @param baseconfig BaseConfig
+     * @param baseconfig
+     *            BaseConfig
      */
     @SuppressWarnings("squid:S3366")
     public HomePage(final BaseConfig baseconfig) {
@@ -108,9 +107,12 @@ public class HomePage {
     }
 
     /**
-     * @param menuName String menuName
-     * @param menuValue String menuValue
-     * @param logMessage String loggerStatement if action passess
+     * @param menuName
+     *            String menuName
+     * @param menuValue
+     *            String menuValue
+     * @param logMessage
+     *            String loggerStatement if action passess
      * @return HomePage class driver.
      * @throws InterruptedException
      */
@@ -118,36 +120,45 @@ public class HomePage {
             final String menuName,
             final String menuValue,
             final String logMessage) {
-        baseconfig.getExplicitWaits().waitforVisibilityOfElementPresent(
-            baseconfig.getBaseDriver(),
-            icoEdFluxLogo,
-            60);
+        baseconfig
+                .getExplicitWaits()
+                .waitforVisibilityOfElementPresent(baseconfig.getBaseDriver(), icoEdFluxLogo, 60);
 
-        final String xPathMenuName =
-            "//*[@class='x-btn-inner x-btn-inner-xcp-nav-button-small' and text()='" + menuName
+        final String xPathMenuName = "//*[@class='x-btn-inner x-btn-inner-xcp-nav-button-small' and text()='"
+                + menuName
                 + "']";
 
         final String xPathMenuValue = "//a//span[text()='" + menuValue + "']";
 
-        final WebElement elementMenuName =
-            baseconfig.getBaseDriver().findElement(By.xpath(xPathMenuName));
+        final WebElement elementMenuName = baseconfig
+                .getBaseDriver()
+                .findElement(By.xpath(xPathMenuName));
 
         commonUtils.clickOnElement(elementMenuName);
 
-        final WebElement elementMenuValue =
-            baseconfig.getBaseDriver().findElement(By.xpath(xPathMenuValue));
+        final WebElement elementMenuValue = baseconfig
+                .getBaseDriver()
+                .findElement(By.xpath(xPathMenuValue));
 
         commonUtils.clickOnElement(elementMenuValue);
-        LOGGER.info(
-            "Main Menu Name: " + menuName + ", Child Menu Name: " + menuValue
-                + " is selected successfully.");
+        LOGGER
+                .info(
+                        "Main Menu Name: "
+                                + menuName
+                                + ", Child Menu Name: "
+                                + menuValue
+                                + " is selected successfully.");
         ExtentTestManager.getTest().log(Status.PASS, logMessage);
 
-        commonUtils.commonLogger(
-            "Main Menu Name: " + menuName + ", Child Menu Name: " + menuValue
-                + " is selected successfully.",
-            Status.PASS,
-            Level.INFO);
+        commonUtils
+                .commonLogger(
+                        "Main Menu Name: "
+                                + menuName
+                                + ", Child Menu Name: "
+                                + menuValue
+                                + " is selected successfully.",
+                        Status.PASS,
+                        Level.INFO);
         return this;
 
     }
@@ -161,13 +172,15 @@ public class HomePage {
     /**
      * Method to compare two images.
      * 
-     * @param img1 BufferedImage
-     * @param img2 BufferedImage
+     * @param img1
+     *            BufferedImage
+     * @param img2
+     *            BufferedImage
      * @return boolean
      */
     public boolean bufferedImagesEqual(final BufferedImage img1, final BufferedImage img2) {
-        final boolean isSizeEqual =
-            (img1.getWidth() == img2.getWidth()) && (img1.getHeight() == img2.getHeight());
+        final boolean isSizeEqual = (img1.getWidth() == img2.getWidth())
+                && (img1.getHeight() == img2.getHeight());
         if (!isSizeEqual) return false;
         for (int x = 0; x < img1.getWidth(); x++) {
             for (int y = 0; y < img1.getHeight(); y++) {
@@ -182,8 +195,10 @@ public class HomePage {
     /**
      * Method to save image using URL.
      * 
-     * @param srcImg String
-     * @param destImg String
+     * @param srcImg
+     *            String
+     * @param destImg
+     *            String
      * @throws IOException
      */
     @SuppressWarnings("squid:S4797")
@@ -192,10 +207,8 @@ public class HomePage {
         try (InputStream in = new URL(srcImg).openStream()) {
             Files.copy(in, Paths.get(destImg));
         } catch (final IOException e) {
-            commonUtils.commonLogger(
-                "Exception ocurred in copying image ",
-                Status.FAIL,
-                Level.ERROR);
+            commonUtils
+                    .commonLogger("Exception ocurred in copying image ", Status.FAIL, Level.ERROR);
 
             throw e;
         }
@@ -205,14 +218,17 @@ public class HomePage {
     /**
      * Method to compare image with standard one.
      * 
-     * @param imgElement WebElement
-     * @param standardImgFilename String
+     * @param imgElement
+     *            WebElement
+     * @param standardImgFilename
+     *            String
      * @return boolean
      * @throws IOException
      */
     @SuppressWarnings("squid:S4797")
-    public boolean verifyImage(final WebElement imgElement, final String standardImgFilename)
-                                                                                              throws IOException {
+    public boolean verifyImage(
+            final WebElement imgElement,
+            final String standardImgFilename) throws IOException {
         final String currentDirectory = System.getProperty("user.dir");
         final String tmpDirectory = currentDirectory + "\\Tmp_Img\\";
         final String standardFilename = currentDirectory + "\\TestData\\" + standardImgFilename;
@@ -224,21 +240,24 @@ public class HomePage {
             final Path path = Paths.get(tmpDirectory);
             if (!path.toFile().exists()) {
                 Files.createDirectory(path);
-                commonUtils.commonLogger(
-                    "Directory created: " + tmpDirectory,
-                    Status.PASS,
-                    Level.INFO);
+                commonUtils
+                        .commonLogger(
+                                "Directory created: " + tmpDirectory,
+                                Status.PASS,
+                                Level.INFO);
             } else {
-                commonUtils.commonLogger(
-                    "Directory already exists : " + tmpDirectory,
-                    Status.PASS,
-                    Level.INFO);
+                commonUtils
+                        .commonLogger(
+                                "Directory already exists : " + tmpDirectory,
+                                Status.PASS,
+                                Level.INFO);
 
             }
-            commonUtils.commonLogger(
-                "Source of standard image: " + standardFilename,
-                Status.PASS,
-                Level.INFO);
+            commonUtils
+                    .commonLogger(
+                            "Source of standard image: " + standardFilename,
+                            Status.PASS,
+                            Level.INFO);
 
             final File imgFileStandard = new File(standardFilename);
             final BufferedImage imgBuffStandard = ImageIO.read(imgFileStandard);
@@ -255,10 +274,11 @@ public class HomePage {
 
                 isEqualImg = true;
             } else {
-                commonUtils.commonLogger(
-                    "Image is not equal to standard " + standardImgFilename,
-                    Status.FAIL,
-                    Level.ERROR);
+                commonUtils
+                        .commonLogger(
+                                "Image is not equal to standard " + standardImgFilename,
+                                Status.FAIL,
+                                Level.ERROR);
 
             }
 
@@ -281,10 +301,12 @@ public class HomePage {
     public HomePage verifyEdfluxLogo() throws IOException {
         boolean isCorrectLogo = false;
         try {
-            baseconfig.getExplicitWaits().waitforVisibilityOfElementPresent(
-                baseconfig.getBaseDriver(),
-                imgEdFluxLogo,
-                30);
+            baseconfig
+                    .getExplicitWaits()
+                    .waitforVisibilityOfElementPresent(
+                            baseconfig.getBaseDriver(),
+                            imgEdFluxLogo,
+                            30);
             commonUtils.verifyElement(imgEdFluxLogo);
             LOGGER.info("Edflux logo is present");
             isCorrectLogo = verifyImage(imgEdFluxLogo, filenameEdFluxLogo);
@@ -310,10 +332,12 @@ public class HomePage {
     public HomePage verifySpringerNatureLogo() throws IOException {
         boolean isCorrectLogo = false;
         try {
-            baseconfig.getExplicitWaits().waitforVisibilityOfElementPresent(
-                baseconfig.getBaseDriver(),
-                imgSpringerNatureLogo,
-                30);
+            baseconfig
+                    .getExplicitWaits()
+                    .waitforVisibilityOfElementPresent(
+                            baseconfig.getBaseDriver(),
+                            imgSpringerNatureLogo,
+                            30);
             commonUtils.verifyElement(imgSpringerNatureLogo);
             LOGGER.info("SpringerNature logo is present");
             isCorrectLogo = verifyImage(imgSpringerNatureLogo, filenameSpringerNatureLogo);

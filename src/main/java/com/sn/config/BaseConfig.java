@@ -1,30 +1,29 @@
 package com.sn.config;
 
 import java.util.Properties;
-import java.util.concurrent.TimeUnit;
 
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.openqa.selenium.WebDriver;
 import org.testng.IHookCallBack;
 import org.testng.IHookable;
 import org.testng.ITestResult;
+import org.testng.Reporter;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.AfterSuite;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeSuite;
 import org.testng.annotations.Parameters;
 import org.testng.asserts.SoftAssert;
-import org.apache.commons.lang3.exception.ExceptionUtils;
-import org.testng.Reporter;
 
 import com.sn.apt.browser.core.BrowserDriverImpl;
-import com.sn.apt.browser.core.CustomChromeDriver;
+import com.sn.apt.browser.core.CustomThreadLocalDriverWithoutDriverVersion;
+import com.sn.apt.browser.core.CustomThreadLocalDriverWithoutDriverVersion.DriverType;
 import com.sn.apt.browser.core.IBrowerDriver;
 import com.sn.apt.browser.navigation.IBrowserNavigator;
 import com.sn.apt.browser.operations.BrowserOperationsImpl;
 import com.sn.apt.browserstack.BrowserStack;
-import com.sn.apt.browserstack.ConfigureCapabilities;
 import com.sn.apt.documentum.JobHelper;
 import com.sn.apt.documentum.QueryHelper;
 import com.sn.apt.email.util.SendEmail;
@@ -131,52 +130,15 @@ public class BaseConfig implements IHookable, WebDriverSupplier {
     /**
      * It will execute beforeclass.
      */
-
-    /**
-     * @param os String
-     * @param osVersion String
-     * @param browserName String
-     * @param browserVersion String
-     * @param browserstackLocal String
-     * @param browserDriver String
-     * @param executionEnv String
-     * @param seleniumVersion String
-     * @param env String
-     */
     @SuppressWarnings("squid:S2696")
     @BeforeClass(alwaysRun = true)
-    @Parameters({
-        "os",
-        "osversion",
-        "browserName",
-        "browserVersion",
-        "browserstackLocal",
-        "seleniumVersion",
-        "browserDriver",
-        "env",
-        "executionEnv" })
-    public void beforeClass(
-            final String os,
-            final String osVersion,
-            final String browserName,
-            final String browserVersion,
-            final String browserstackLocal,
-            final String seleniumVersion,
-            final String browserDriver,
-            final String env,
-            final String executionEnv) {
+    @Parameters({ "env", "executionEnv" })
+    public void beforeClass(final String env, final String executionEnv) {
         executionEnvApp = executionEnv;
         if ("local".equals(env)) {
             configureLocalBrowser(executionEnv);
         } else {
-            configureBrowserStack(
-                os,
-                osVersion,
-                browserName,
-                browserVersion,
-                browserstackLocal,
-                seleniumVersion,
-                browserDriver);
+            // TODO for other environments
         }
 
     }
@@ -189,59 +151,21 @@ public class BaseConfig implements IHookable, WebDriverSupplier {
     }
 
     /**
-     * This method is to configure browserstack settings.
-     * 
-     * @param os String
-     * @param osVersion String
-     * @param browserName String
-     * @param browserVersion String
-     * @param browserstackLocal String
-     * @param seleniumVersion String
-     * @param browserDriver String
-     */
-    @SuppressWarnings("squid:S2696")
-    private void configureBrowserStack(
-            final String os,
-            final String osVersion,
-            final String browserName,
-            final String browserVersion,
-            final String browserstackLocal,
-            final String seleniumVersion,
-            final String browserDriver) {
-        final ConfigureCapabilities caps =
-            new ConfigureCapabilities(
-                os,
-                osVersion,
-                browserName,
-                browserVersion,
-                browserstackLocal,
-                seleniumVersion,
-                browserDriver);
-        browserStack = new BrowserStack(caps, config.getProperty("browserstack_hub_url"));
-        setBaseDriver(browserStack.getDriver());
-        browseroprimpl = new BrowserOperationsImpl(getBaseDriver());
-        implicitWait.implicitWait(getBaseDriver(), 10);
-        getBaseDriver().manage().timeouts().pageLoadTimeout(20, TimeUnit.SECONDS);
-    }
-
-    /**
      * This method is to configure execution in local browser.
      * 
-     * @param executionEnv String
+     * @param executionEnv
+     *            String
      */
     @SuppressWarnings("squid:S2696")
     @Parameters("executionEnv")
     private void configureLocalBrowser(final String executionEnv) {
-        browserUtil = new CustomChromeDriver(config.getProperty("chromedriverVersion"));
-        setBaseDriver(browserUtil.getDriver());
-        browseroprimpl = new BrowserOperationsImpl(getBaseDriver());
-        implicitWait.implicitWait(getBaseDriver(), 20);
-        if ("INT".equals(executionEnv)) {
-            LOGGER.info("Set environemnt as INTEGRATION");
-            getBaseDriver().get(config.getProperty("project_int_url"));
-        } else if ("ACC".equals(executionEnv)) {
-            getBaseDriver().get(config.getProperty("project_acc_url"));
-            LOGGER.info("Set environemnt as ACCEPTANCE");
+        browserUtil = new CustomThreadLocalDriverWithoutDriverVersion(DriverType.CHROME);
+        baseDriver = browserUtil.getThreadLocalDriver();
+        browseroprimpl = new BrowserOperationsImpl(baseDriver);
+        if (executionEnv.equals("local")) {
+            baseDriver.get(config.getProperty("local"));
+        } else if (executionEnv.equals("test")) {
+            baseDriver.get(config.getProperty("test"));
         }
         getBaseDriver().manage().window().maximize();
     }
@@ -272,7 +196,8 @@ public class BaseConfig implements IHookable, WebDriverSupplier {
     }
 
     /**
-     * @param baseDriver the baseDriver to set
+     * @param baseDriver
+     *            the baseDriver to set
      */
     @SuppressWarnings("squid:S2696")
     public void setBaseDriver(final WebDriver baseDriver) {
@@ -410,7 +335,8 @@ public class BaseConfig implements IHookable, WebDriverSupplier {
     }
 
     /**
-     * @param result ITestResult
+     * @param result
+     *            ITestResult
      * @return (SoftAssert) object
      */
     private static SoftAssert getSoftAssert(final ITestResult result) {

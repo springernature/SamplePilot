@@ -1,4 +1,5 @@
 package com.sn.pageobjects;
+
 /**
  * This file is for reference only.
  */
@@ -12,7 +13,6 @@ import org.openqa.selenium.support.PageFactory;
 
 import com.aventstack.extentreports.Status;
 import com.sn.config.BaseConfig;
-import com.sn.apt.listeners.ExtentTestManager;
 import com.sn.utils.CommonUtils;
 
 /**
@@ -41,7 +41,8 @@ public class LoginPage {
     /**
      * This is the constructor for LoginPage class.
      * 
-     * @param baseConfig BaseConfig
+     * @param baseConfig
+     *            BaseConfig
      */
     @SuppressWarnings("squid:S3366")
     public LoginPage(final BaseConfig baseConfig) {
@@ -53,37 +54,53 @@ public class LoginPage {
     }
 
     /**
-     * @param baseConfig BaseConfig
-     * @param userKey String
-     * @param passKey String
+     * @param baseConfig
+     *            BaseConfig
+     * @param userKey
+     *            String
+     * @param passKey
+     *            String
      */
     public LoginPage(final BaseConfig baseConfig, final String userKey, final String passKey) {
 
         this(baseConfig);
-        LOGGER.info(
-            "Before constructor 2 " + this.baseConfig.getConfig().getProperty(
-                passKey + "_" + BaseConfig.getExecutionEnvApp().toLowerCase()));
+        LOGGER
+                .info(
+                        "Before constructor 2 "
+                                + this.baseConfig
+                                        .getConfig()
+                                        .getProperty(
+                                                passKey
+                                                        + "_"
+                                                        + BaseConfig
+                                                                .getExecutionEnvApp()
+                                                                .toLowerCase()));
         login(
-            this.baseConfig.getConfig().getProperty(
-                userKey + "_" + BaseConfig.getExecutionEnvApp().toLowerCase()),
-            this.baseConfig.getConfig().getProperty(
-                passKey + "_" + BaseConfig.getExecutionEnvApp().toLowerCase()));
+                this.baseConfig
+                        .getConfig()
+                        .getProperty(userKey + "_" + BaseConfig.getExecutionEnvApp().toLowerCase()),
+                this.baseConfig
+                        .getConfig()
+                        .getProperty(
+                                passKey + "_" + BaseConfig.getExecutionEnvApp().toLowerCase()));
         LOGGER.info("Constructor 2 initialize in Login Page class.");
     }
 
     /**
      * This action sets the login username value.
      * 
-     * @param user String
+     * @param user
+     *            String
      * @return driver for Loginpage Class
      * @throws Exception
      */
     private LoginPage setLoginUserName(final String user) {
 
-        commonUtils.setText(
-            txtbxUserName,
-            user,
-            "Username:: " + user + " :: has been set successfully.");
+        commonUtils
+                .setText(
+                        txtbxUserName,
+                        user,
+                        "Username:: " + user + " :: has been set successfully.");
 
         return this;
     }
@@ -91,15 +108,17 @@ public class LoginPage {
     /**
      * This action sets the login password value.
      * 
-     * @param pwd String
+     * @param pwd
+     *            String
      * @return driver for Loginpage Class
      * @throws Exception
      */
     private LoginPage setLoginPassword(final String pwd) {
-        commonUtils.setText(
-            txtbxPassword,
-            pwd,
-            "Password:: " + pwd + " :: has been set successfully.");
+        commonUtils
+                .setText(
+                        txtbxPassword,
+                        pwd,
+                        "Password:: " + pwd + " :: has been set successfully.");
 
         return this;
     }
@@ -119,8 +138,10 @@ public class LoginPage {
     /**
      * This action is to login user into the application.
      * 
-     * @param username String
-     * @param password String
+     * @param username
+     *            String
+     * @param password
+     *            String
      * @return driver for Loginpage Class
      */
     public LoginPage login(final String username, final String password) {
@@ -130,10 +151,8 @@ public class LoginPage {
             clickLoginSignInButtob();
             LOGGER.info("Login is Successful.");
         } catch (final Exception e) {
-            commonUtils.commonLogger(
-                "Error occurred while Login process.",
-                Status.FAIL,
-                Level.ERROR);
+            commonUtils
+                    .commonLogger("Error occurred while Login process.", Status.FAIL, Level.ERROR);
             throw e;
         }
 
