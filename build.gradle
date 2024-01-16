@@ -13,12 +13,18 @@ mavenCentral()
 }
 dependencies {
 classpath("org.springframework.boot:spring-boot-gradle-plugin:2.1.0.RELEASE")
-classpath "org.jfrog.buildinfo:build-info-extractor-gradle:latest.release"
-classpath "org.sonarsource.scanner.gradle:sonarqube-gradle-plugin:2.6.2"
+classpath "org.jfrog.buildinfo:build-info-extractor-gradle:4.15.1"
 }
 }
-plugins {
-id "org.sonarqube" version "1.1"
+buildscript {
+  repositories {
+    maven {
+      url = uri("https://plugins.gradle.org/m2/")
+    }
+  }
+  dependencies {
+    classpath("org.sonarsource.scanner.gradle:sonarqube-gradle-plugin:2.7")
+  }
 }
 apply plugin: 'java-library'
 apply plugin: 'maven'
@@ -44,7 +50,7 @@ dependencies {
 compile group: 'org.seleniumhq.selenium', name: 'selenium-java', version: '3.11.0'
 
 //webdriver manager dependency - for browser set up
-compile("io.github.bonigarcia:webdrivermanager:3.1.1")
+compile("io.github.bonigarcia:webdrivermanager:5.4.1")
 
 //test ng dependency
 compile group: 'org.testng', name: 'testng', version: '6.11'
@@ -59,8 +65,8 @@ compile "org.apache.poi:poi-ooxml:3.17"
 compile group: 'org.apache.logging.log4j', name: 'log4j-api', version: '2.15.0'
 compile group: 'org.apache.logging.log4j', name: 'log4j-core', version: '2.15.0'
 
-//extent report dependency
-compile group: 'com.aventstack', name: 'extentreports', version: '3.1.2'
+// https://mvnrepository.com/artifact/com.aventstack/extentreports
+implementation group: 'com.aventstack', name: 'extentreports', version: '5.0.9'
 
 // https://mvnrepository.com/artifact/com.relevantcodes/extentreports
 compile group: 'com.relevantcodes', name: 'extentreports', version: '2.41.2'
@@ -89,7 +95,7 @@ compile group: 'org.springframework', name: 'spring-context', version: '3.0.7.RE
 compile group: 'org.springframework', name: 'spring-core', version: '3.0.7.RELEASE'
 compile group: 'org.springframework', name: 'spring-test', version: '3.0.7.RELEASE'
 compile group: 'software.amazon.ion', name: 'ion-java', version: '1.0.2'
-compile group: 'com.springernature', name: 'AutoPilot', version: '3.1.9'
+compile group: 'com.springernature', name: 'AutoPilot', version: '5.0.2'
 
 // Browserstack dependency
 
