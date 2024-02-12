@@ -1,0 +1,35 @@
+{
+  "PrintIssn": "0219-1377",
+  "ProductionWorkflow": "Internal",
+  "PrintQuality": "Normal",
+  "ProductType": "ArchiveJournal",
+  "Title": "Knowledge and Information Systems",
+  "ElectronicIssn": "0219-3116",
+  "Publisher": {
+    "Code": "SPVL",
+    "Url": "",
+    "Name": "Springer London",
+    "Location": "London"
+  },
+  "PublisherImprint": "Harbin Engineering University, co-published with Springer",
+  "NumberingStyle": "ContentOnly",
+  "Language": "En",
+  "SubjectCollection": {
+    "Value": "Engineering",
+    "Code": "SC8"
+  },
+  "JournalId": 700,
+  "AbbreviatedTitle": "Knowl Inf Syst",
+  "OutputMedium": "All",
+  "AuthorVersionPublication": true,
+  "CostUnitNumber": "30359439",
+  "ProductionUser": {
+    "LoginName": "steve",
+    "Email": "steve@springer.com",
+    "FirstName": "Steve",
+    "LastName": "Procter"
+  },
+  "ContinuousArticlePublishing": true,
+  "SubTitle": "An International Journal",
+  "Doi": "10.1007"
+}

@@ -1,0 +1,69 @@
+[INFO ] 2024-02-12 11:46:27.865 [main] SetRequestActions - set Header :: %s :: %s  
+[INFO ] 2024-02-12 11:46:27.873 [main] ApiActions - Resource URI is:: http://localhost:8080/
+[INFO ] 2024-02-12 11:46:27.873 [main] ApiActions - Resource is :: rest/api/Journal/
+[INFO ] 2024-02-12 11:46:27.873 [main] ApiActions - Complete file path :: C:\Users\nap0878\Sample_Api_Automation\TestData\journal.json
+[INFO ] 2024-02-12 11:46:27.901 [main] SetRequestActions - Set Request body successfully.
+[INFO ] 2024-02-12 11:46:27.909 [main] SetRequestActions - set Preemptive/basic authentication user name :: %s  password :: %s  
+[INFO ] 2024-02-12 11:46:27.917 [main] SetRequestActions - Creating Request specification
+[INFO ] 2024-02-12 11:46:31.614 [main] SendRequestActions - Sent POST Request successfully.
+[INFO ] 2024-02-12 11:46:31.617 [main] ExtentManager - Directory: C:\Users\nap0878\Sample_Api_Automation\target is created!
+[ERROR] 2024-02-12 11:46:32.352 [main] AutoPilotUtil - Exception occured ::null
+[INFO ] 2024-02-12 11:47:50.831 [main] TestListenerForAPI - *** Test Suite RestApiTest started ***
+[INFO ] 2024-02-12 11:47:50.842 [main] ExtentManager - Directory already exists: C:\Users\nap0878\Sample_Api_Automation\target
+[INFO ] 2024-02-12 11:47:51.577 [main] TestListenerForAPI - *** Running test method verifyResponseCodeforPostJournal...
+[INFO ] 2024-02-12 11:47:53.364 [main] SetRequestActions - set Header :: %s :: %s  
+[INFO ] 2024-02-12 11:47:53.364 [main] ApiActions - Resource URI is:: http://localhost:8080/
+[INFO ] 2024-02-12 11:47:53.364 [main] ApiActions - Resource is :: rest/api/Journal/
+[INFO ] 2024-02-12 11:47:53.364 [main] ApiActions - Complete file path :: C:\Users\nap0878\Sample_Api_Automation\TestData\journal.json
+[INFO ] 2024-02-12 11:47:53.385 [main] SetRequestActions - Set Request body successfully.
+[INFO ] 2024-02-12 11:47:53.393 [main] SetRequestActions - set Preemptive/basic authentication user name :: %s  password :: %s  
+[INFO ] 2024-02-12 11:47:53.397 [main] SetRequestActions - Creating Request specification
+[INFO ] 2024-02-12 11:47:55.708 [main] SendRequestActions - Sent POST Request successfully.
+[INFO ] 2024-02-12 11:47:56.113 [main] TestListenerForAPI - *** Executed verifyResponseCodeforPostJournal test successfully...
+[INFO ] 2024-02-12 11:47:56.148 [main] TestListenerForAPI - *** Test Suite RestApiTest ending ***
+[INFO ] 2024-02-12 16:47:37.556 [main] TestListenerForAPI - *** Test Suite RestApiTest started ***
+[INFO ] 2024-02-12 16:47:37.566 [main] ExtentManager - Directory already exists: C:\Users\nap0878\Sample_Api_Automation\target
+[INFO ] 2024-02-12 16:47:38.319 [main] TestListenerForAPI - *** Running test method verifyResponseCodeforPostJournal...
+[INFO ] 2024-02-12 16:47:40.223 [main] SetRequestActions - set Header :: %s :: %s  
+[INFO ] 2024-02-12 16:47:40.223 [main] ApiActions - Resource URI is:: http://localhost:8080/
+[INFO ] 2024-02-12 16:47:40.223 [main] ApiActions - Resource is :: rest/api/Journal/
+[INFO ] 2024-02-12 16:47:40.223 [main] ApiActions - Complete file path :: C:\Users\nap0878\Sample_Api_Automation\TestData\journal.json
+[INFO ] 2024-02-12 16:47:40.248 [main] SetRequestActions - Set Request body successfully.
+[INFO ] 2024-02-12 16:47:40.259 [main] SetRequestActions - set Preemptive/basic authentication user name :: %s  password :: %s  
+[INFO ] 2024-02-12 16:47:40.265 [main] SetRequestActions - Creating Request specification
+[ERROR] 2024-02-12 16:47:46.193 [main] AutoPilotUtil - Exception occured ::Connection refused: connect
+[INFO ] 2024-02-12 16:47:46.213 [main] TestListenerForAPI - *** Test execution verifyResponseCodeforPostJournal failed...
+[INFO ] 2024-02-12 16:47:46.216 [main] TestListenerForAPI - *** Running test method verifyResponseCodeforPostJournal2...
+[INFO ] 2024-02-12 16:47:46.217 [main] SetRequestActions - set Header :: %s :: %s  
+[INFO ] 2024-02-12 16:47:46.217 [main] ApiActions - Resource URI is:: http://localhost:8080/
+[INFO ] 2024-02-12 16:47:46.217 [main] ApiActions - Resource is :: rest/api/Journal/
+[INFO ] 2024-02-12 16:47:46.217 [main] ApiActions - Complete file path :: C:\Users\nap0878\Sample_Api_Automation\TestData\journal.json
+[INFO ] 2024-02-12 16:47:46.218 [main] SetRequestActions - Set Request body successfully.
+[INFO ] 2024-02-12 16:47:46.218 [main] SetRequestActions - set Preemptive/basic authentication user name :: %s  password :: %s  
+[INFO ] 2024-02-12 16:47:46.218 [main] SetRequestActions - Creating Request specification
+[ERROR] 2024-02-12 16:47:50.423 [main] AutoPilotUtil - Exception occured ::Connection refused: connect
+[INFO ] 2024-02-12 16:47:50.427 [main] TestListenerForAPI - *** Test execution verifyResponseCodeforPostJournal2 failed...
+[INFO ] 2024-02-12 16:47:50.492 [main] TestListenerForAPI - *** Test Suite RestApiTest ending ***
+[INFO ] 2024-02-12 16:51:48.596 [main] TestListenerForAPI - *** Test Suite RestApiTest started ***
+[INFO ] 2024-02-12 16:51:48.605 [main] ExtentManager - Directory already exists: C:\Users\nap0878\Sample_Api_Automation\target
+[INFO ] 2024-02-12 16:51:49.361 [main] TestListenerForAPI - *** Running test method verifyResponseCodeforPostJournal...
+[INFO ] 2024-02-12 16:51:51.209 [main] SetRequestActions - set Header :: %s :: %s  
+[INFO ] 2024-02-12 16:51:51.209 [main] ApiActions - Resource URI is:: http://localhost:8080/
+[INFO ] 2024-02-12 16:51:51.209 [main] ApiActions - Resource is :: rest/api/Journal/
+[INFO ] 2024-02-12 16:51:51.209 [main] ApiActions - Complete file path :: C:\Users\nap0878\Sample_Api_Automation\TestData\journal.json
+[INFO ] 2024-02-12 16:51:51.230 [main] SetRequestActions - Set Request body successfully.
+[INFO ] 2024-02-12 16:51:51.240 [main] SetRequestActions - set Preemptive/basic authentication user name :: %s  password :: %s  
+[INFO ] 2024-02-12 16:51:51.243 [main] SetRequestActions - Creating Request specification
+[INFO ] 2024-02-12 16:51:54.801 [main] SendRequestActions - Sent POST Request successfully.
+[INFO ] 2024-02-12 16:51:55.444 [main] TestListenerForAPI - *** Executed verifyResponseCodeforPostJournal test successfully...
+[INFO ] 2024-02-12 16:51:55.450 [main] TestListenerForAPI - *** Running test method verifyResponseCodeforPostJournal2...
+[INFO ] 2024-02-12 16:51:55.451 [main] SetRequestActions - set Header :: %s :: %s  
+[INFO ] 2024-02-12 16:51:55.452 [main] ApiActions - Resource URI is:: http://localhost:8080/
+[INFO ] 2024-02-12 16:51:55.452 [main] ApiActions - Resource is :: rest/api/Journal/
+[INFO ] 2024-02-12 16:51:55.452 [main] ApiActions - Complete file path :: C:\Users\nap0878\Sample_Api_Automation\TestData\journal.json
+[INFO ] 2024-02-12 16:51:55.452 [main] SetRequestActions - Set Request body successfully.
+[INFO ] 2024-02-12 16:51:55.453 [main] SetRequestActions - set Preemptive/basic authentication user name :: %s  password :: %s  
+[INFO ] 2024-02-12 16:51:55.453 [main] SetRequestActions - Creating Request specification
+[INFO ] 2024-02-12 16:51:55.919 [main] SendRequestActions - Sent POST Request successfully.
+[INFO ] 2024-02-12 16:51:55.936 [main] TestListenerForAPI - *** Test execution verifyResponseCodeforPostJournal2 failed...
+[INFO ] 2024-02-12 16:51:56.012 [main] TestListenerForAPI - *** Test Suite RestApiTest ending ***
