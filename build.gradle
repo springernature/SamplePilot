@@ -3,8 +3,8 @@ buildscript {
     maven {
       url 'https://springernature.jfrog.io/springernature/libs-release'
       credentials {
-  		 	  username = "sonarflux1"
-        password = "AKCp5dLN31m6tmSrECtJSxsVYYg8nzgR1wcrZJft9qJNNNLFTKB91iY8KHm9v5JD4o2T9HRGs"
+  		 	  username = System.getenv('JFROG_USERNAME')
+        password = System.getenv('JFROG_PASSWORD')
       }
       name = "maven-main-cache"
     }
@@ -54,8 +54,8 @@ artifactory {
   resolve {
     repository {
       repoKey = 'libs-release'
-      	  username = "sonarflux1"
-        password = "AKCp5dLN31m6tmSrECtJSxsVYYg8nzgR1wcrZJft9qJNNNLFTKB91iY8KHm9v5JD4o2T9HRGs"
+      	    username = System.getenv('JFROG_USERNAME')
+        password = System.getenv('JFROG_PASSWORD')
       maven = true
     }
   }
